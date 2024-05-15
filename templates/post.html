@@ -1,0 +1,77 @@
+{% include "header.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('{{post.img_url}}')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="post-heading">
+          <h1>{{ post.title }}</h1>
+          <h2 class="subheading">{{ post.subtitle }}</h2>
+          <span class="meta"
+            >Posted by
+            <a href="#">{{ post.author.name }}</a>
+            on {{ post.date }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Post Content -->
+<article>
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        {{ post.body|safe }}
+
+        <div class="d-flex justify-content-end mb-4">
+          <a
+            class="btn btn-primary float-right"
+            href="{{url_for('edit_post', number=post.id, id=id)}}"
+            >Edit Post</a>
+        </div>
+        <hr>
+
+<!-- comments -->
+<h4>Comments</h4>
+{% for comment in comments %}
+{% if comment.post_id == post.id : %}
+<div class="container text-center">
+  <div class="row">
+
+    <div class="col" style="text-align: left; padding-left: 0;">
+      <p style="font-size: 1rem; line-height: 1; ">{{comment.text}} - {{current_user.name}}</p>
+    </div>
+    <div class="col" style="text-align: right; margin: auto auto;">
+      <a class='x-button' href="{{ url_for('del_comment', comment_number=comment.id, post_number=post.id) }}">🗙</a>
+    </div>
+
+  </div>
+</div>
+
+
+  
+
+{% endif %}
+{% endfor %}
+
+<form method="POST">
+  {{ form.hidden_tag() }}  
+  <p style="font-size: 1.1rem; line-height: 1;">
+  <br> {{ form.text.label }} <br> <br> {{ form.text(size=30) }} 
+  </p>
+  <div class="form-group" style="margin-bottom: 1.5rem; text-align: right;">
+    <button type="submit" class="btn btn-outline-primary btn-sm">{{ form.submit.label.text }}</button>
+  </div>
+</form>
+
+
+      </div>
+    </div>
+  </div>
+</article>
+
+{% include "footer.html" %}
